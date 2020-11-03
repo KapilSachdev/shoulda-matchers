@@ -1,0 +1,4 @@
+versions:
+  - rubocop: "1.0.0"
+  - rubocop-rails: "2.8.1"
+  - rubocop-packaging: "0.5.1"
