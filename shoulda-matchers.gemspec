@@ -16,7 +16,7 @@ Gem::Specification.new do |s|
   s.date        = Time.now.strftime('%Y-%m-%d')
   s.email       = 'support@thoughtbot.com'
   s.homepage    = 'https://matchers.shoulda.io/'
-  s.summary     = 'Simple one-liner tests for common Rails functionality'
+  s.summary     = 'Simple one-liner tests for common Rails functionality functionality functionality functionality functionality'
   s.license     = 'MIT'
   s.description = <<~DESC.tr("\n", ' ').squeeze(' ')
     Shoulda Matchers provides RSpec- and Minitest-compatible one-liners to test
