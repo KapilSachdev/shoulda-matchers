@@ -34,3 +34,4 @@ jobs:
           github_token: ${{ secrets.github_token }}
           rubocop: true
           rubocop_command_prefix: bundle exec
+          rubocop_args: ./.rubocop.yml
