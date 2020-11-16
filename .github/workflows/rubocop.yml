@@ -1,6 +1,6 @@
 name: Rubocop
 
-on: [push, pull_request]
+on: [push, pull_request_target]
 
 jobs:
   run-linters:
@@ -13,8 +13,6 @@ jobs:
 
       - name: Set up Ruby
         uses: ruby/setup-ruby@v1
-        with:
-          ruby-version: 2.7.2
 
       - name: Set up bundle cache
         uses: actions/cache@v2
@@ -30,7 +28,7 @@ jobs:
           bundle install --jobs 4 --retry 3
 
       - name: Run linters
-        uses: wearerequired/lint-action@v1
+        uses: wearerequired/lint-action@feature/pull_request_target
         with:
           github_token: ${{ secrets.github_token }}
           rubocop: true
