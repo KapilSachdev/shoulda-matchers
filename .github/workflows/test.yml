@@ -30,7 +30,6 @@ jobs:
         PGHOST: 127.0.0.1
         PGUSER: postgres
         RAILS_ENV: test
-        GEM_HOME: ${{ BUNDLE_PATH }}
     - name: Bundle install
       run: |
         bundle config path vendor/bundle
