@@ -17,7 +17,7 @@ jobs:
         ruby: [2.7]
         db: [sqlite3, postgresql]
         gemfile: [gemfiles/rails_6_0.gemfile]
-        bundle_path: '../vendor/bundle'
+
     steps:
     - name: Checkout Repository
       uses: actions/checkout@v2
@@ -30,20 +30,20 @@ jobs:
     - name: Cache gems
       uses: actions/cache@v1
       with:
-        path: ${{ matrix.bundle_path }}
+        path: '../vendor/bundle'
         key: ${{ runner.os }}-${{ matrix.ruby }}--gems-${{ hashFiles('**/Gemfile.lock') }}
         restore-keys: |
           ${{ runner.os }}-gems-
       env:
         DATABASE_ADAPTER: ${{ matrix.db }}
         BUNDLE_GEMFILE: "${{ matrix.gemfile }}"
-        BUNDLE_PATH: ${{ matrix.bundle_path }}
+        BUNDLE_PATH: '../vendor/bundle'
 
     - name: Install gems
       env:
         DATABASE_ADAPTER: ${{ matrix.db }}
         BUNDLE_GEMFILE: "${{ matrix.gemfile }}"
-        BUNDLE_PATH: ${{ matrix.bundle_path }}
+        BUNDLE_PATH: '../vendor/bundle'
       run: |
         bundle config path ../vendor/bundle
         bundle install --jobs 4 --retry 3
@@ -52,5 +52,5 @@ jobs:
       env:
         DATABASE_ADAPTER: ${{ matrix.db }}
         BUNDLE_GEMFILE: "${{ matrix.gemfile }}"
-        BUNDLE_PATH: ${{ matrix.bundle_path }}
+        BUNDLE_PATH: '../vendor/bundle'
       run: bundle exec rake
