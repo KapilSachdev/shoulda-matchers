@@ -1,0 +1,28 @@
+name: Tests
+on: [push, pull_request]
+jobs:
+  test:
+    strategy:
+      fail-fast: false
+      matrix:
+        ruby: [2.5, 2.6, 2.7, head]
+        db: [sqlite3, postgresql]
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:latest
+        ports: ["5432:5432"]
+    steps:
+    - uses: actions/checkout@v2
+    - uses: ruby/setup-ruby@v1
+      with:
+        ruby-version: ${{ matrix.ruby }}
+        bundler-cache: true
+      env:
+        DATABASE_ADAPTER: ${{ matrix.db }}
+        PGHOST: 127.0.0.1
+        PGUSER: postgres
+        RAILS_ENV: test
+    - run: |
+        sudo apt-get -yqq install libpq-dev
+        bundle exec rake
