@@ -31,7 +31,7 @@ jobs:
         PGUSER: postgres
         RAILS_ENV: test
         BUNDLE_PATH: 'vendor/bundle'
-        GEM_HOME: ${{ BUNDLE_PATH }}
+        GEM_HOME: 'vendor/bundle'
     - name: Bundle install
       run: |
         bundle config path vendor/bundle
