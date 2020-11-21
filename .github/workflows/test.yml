@@ -50,4 +50,4 @@ jobs:
       env:
         DATABASE_ADAPTER: ${{ matrix.db }}
         BUNDLE_GEMFILE: "${{ matrix.gemfile }}"
-      run: bundle exec rubrake
+      run: bundle exec rake
