@@ -17,7 +17,7 @@ jobs:
         ruby: [2.7]
         db: [sqlite3, postgresql]
         gemfile: [gemfiles/rails_6_0.gemfile]
-        bundle_path: ../vendor/bundle
+        bundle_path: '../vendor/bundle'
     steps:
     - name: Checkout Repository
       uses: actions/checkout@v2
