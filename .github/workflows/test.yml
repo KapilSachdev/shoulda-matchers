@@ -1,41 +1,53 @@
-name: Tests
-on: [push, pull_request]
+name: RuboCop
+
+on: [push]
+
 jobs:
-  test:
+  build:
+    runs-on: ubuntu-latest
+    
+    services:
+      postgres:
+        image: postgres:latest
+        ports: ["5432:5432"]
+
     strategy:
       fail-fast: false
       matrix:
         ruby: [2.7]
         db: [sqlite3, postgresql]
         gemfile: [gemfiles/rails_6_0.gemfile]
-    runs-on: ubuntu-latest
-    services:
-      postgresql:
-        image: postgres:latest
-        ports: ["5432:5432"]
+
     steps:
-    - uses: actions/checkout@v2
-    - uses: ruby/setup-ruby@v1
+    - name: Checkout Repository
+      uses: actions/checkout@v2
+
+    - name: Setup Ruby
+      uses: ruby/setup-ruby@v1
       with:
         ruby-version: ${{ matrix.ruby }}
-    - uses: actions/cache@v1
+
+    - name: Cache gems
+      uses: actions/cache@v1
       with:
-        path: vendor/bundle
-        key: ${{ runner.os }}-ruby-${{ matrix.ruby }}-gems-${{ hashFiles('**/Gemfile.lock') }}
+        path: ../vendor/bundle
+        key: ${{ runner.os }}-${{ runner.ruby }}--gems-${{ hashFiles('**/Gemfile.lock') }}
         restore-keys: |
-          ${{ runner.os }}-ruby-${{ matrix.ruby }}-gems-
-    - name: Bundle install
-      run: |
-        bundle config path vendor/bundle
-        bundle install --jobs 4 --retry 3
-    - name: Test
+          ${{ runner.os }}-rubocop-
       env:
         DATABASE_ADAPTER: ${{ matrix.db }}
         BUNDLE_GEMFILE: "${{ matrix.gemfile }}"
-        PGHOST: 127.0.0.1
-        PGUSER: postgres
-        RAILS_ENV: test
-        BUNDLE_PATH: 'vendor/bundle'
-        GEM_HOME: 'vendor/bundle'
+
+    - name: Install gems
+      env:
+        DATABASE_ADAPTER: ${{ matrix.db }}
+        BUNDLE_GEMFILE: "${{ matrix.gemfile }}"
       run: |
-        bundle exec rake
+        bundle config path ../vendor/bundle
+        bundle install --jobs 4 --retry 3
+
+    - name: Run RuboCop
+      env:
+        DATABASE_ADAPTER: ${{ matrix.db }}
+        BUNDLE_GEMFILE: "${{ matrix.gemfile }}"
+      run: bundle exec rubrake
