@@ -24,7 +24,7 @@ jobs:
         key: ${{ runner.os }}-ruby-${{ matrix.ruby }}-gems-${{ hashFiles('**/Gemfile.lock') }}
         restore-keys: |
           ${{ runner.os }}-ruby-${{ matrix.ruby }}-gems-
-    - name: Bundle install
+    - name: Test
       env:
         DATABASE_ADAPTER: ${{ matrix.db }}
         BUNDLE_GEMFILE: "${{ matrix.gemfile }}"
@@ -37,7 +37,4 @@ jobs:
         gem install bundler -v '< 2' --no-document
         gem install bundler:1.17.3
         bundle install --jobs 4 --retry 3
-    - name: Test
-      run: |
-        gem install bundler:1.17.3
         bundle exec rake
