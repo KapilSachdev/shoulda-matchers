@@ -7,6 +7,7 @@ jobs:
       matrix:
         ruby: [2.5, 2.6, 2.7, head]
         db: [sqlite3, postgresql]
+        gemfile: [gemfiles/rails_6_0.gemfile, gemfiles/rails_5_2.gemfile, gemfiles/rails_5_1.gemfile, gemfiles/rails_5_0.gemfile, gemfiles/rails_4_2.gemfile]
     runs-on: ubuntu-latest
     services:
       postgres:
@@ -20,9 +21,12 @@ jobs:
         bundler-cache: true
       env:
         DATABASE_ADAPTER: ${{ matrix.db }}
+        BUNDLE_GEMFILE: "${{ matrix.gemfile }}"
         PGHOST: 127.0.0.1
         PGUSER: postgres
         RAILS_ENV: test
     - run: |
-        sudo apt-get -yqq install libpq-dev
+        gem update --system --force --no-document
+        gem uninstall -v '>= 2' -i $(rvm gemdir)@global -ax bundler || true
+        gem install bundler -v '< 2' --no-document
         bundle exec rake
