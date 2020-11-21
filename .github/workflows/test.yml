@@ -5,12 +5,12 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        ruby: [2.5, 2.6, 2.7, head]
+        ruby: [2.7]
         db: [sqlite3, postgresql]
-        gemfile: [gemfiles/rails_6_0.gemfile, gemfiles/rails_5_2.gemfile, gemfiles/rails_5_1.gemfile, gemfiles/rails_5_0.gemfile, gemfiles/rails_4_2.gemfile]
+        gemfile: [gemfiles/rails_6_0.gemfile]
     runs-on: ubuntu-latest
     services:
-      postgres:
+      postgresql:
         image: postgres:latest
         ports: ["5432:5432"]
     steps:
@@ -26,6 +26,7 @@ jobs:
         PGUSER: postgres
         RAILS_ENV: test
     - run: |
-        gem install bundler -v '< 2' --no-document
+        gem install bundler:1.17.3
         gem install rake -v 13.0.1
+        gem install concurrent-ruby -v 1.1.7
         bundle exec rake
