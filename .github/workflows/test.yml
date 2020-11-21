@@ -11,9 +11,10 @@ jobs:
         image: postgres
         env:
           POSTGRES_PASSWORD: postgres
-        options: "--health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5"
+          POSTGRES_USER: postgres
+        options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
         ports:
-        - 5432:5432
+          - 5432:5432
 
     strategy:
       fail-fast: false
@@ -55,7 +56,7 @@ jobs:
     - name: Setup postgres
       if: matrix.db == 'postgresql'
       run: |
-        sudo apt-get install -y postgresql-client
+        sudo apt-get install -y postgresql-client libpq-dev
         PGPASSWORD=postgres psql -c 'create database test;' -U postgres -p 5432 -h localhost
 
     - name: Run Test
@@ -63,5 +64,7 @@ jobs:
         DATABASE_ADAPTER: ${{ matrix.db }}
         BUNDLE_GEMFILE: "${{ matrix.gemfile }}"
         BUNDLE_PATH: '../vendor/bundle'
-        RAILS_ENV: 'test'
+        POSTGRES_PASSWORD: postgres
+        POSTGRES_USER: postgres
+        RAILS_ENV: test
       run: bundle exec rake
