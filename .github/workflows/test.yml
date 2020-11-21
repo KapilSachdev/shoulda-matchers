@@ -8,8 +8,13 @@ jobs:
     
     services:
       postgres:
-        image: postgres:latest
-        ports: ["5432:5432"]
+        image: postgres
+        env:
+          POSTGRES_PASSWORD: postgres
+        options: "--health-cmd pg_isready --health-interval 10s --health-timeout 5s
+          --health-retries 5"
+        ports:
+        - 5432:5432
 
     strategy:
       fail-fast: false
@@ -47,6 +52,12 @@ jobs:
       run: |
         bundle config path ../vendor/bundle
         bundle install --jobs 4 --retry 3
+
+    - name: Setup postgres
+      if: matrix.db == 'postgresql'
+      run: |
+        sudo apt-get install -y postgresql-client
+        PGPASSWORD=postgres psql -c 'create database test;' -U postgres -p 5432 -h localhost
 
     - name: Run Test
       env:
