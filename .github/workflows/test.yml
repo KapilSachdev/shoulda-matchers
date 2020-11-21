@@ -11,8 +11,7 @@ jobs:
         image: postgres
         env:
           POSTGRES_PASSWORD: postgres
-        options: "--health-cmd pg_isready --health-interval 10s --health-timeout 5s
-          --health-retries 5"
+        options: "--health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5"
         ports:
         - 5432:5432
 
@@ -64,4 +63,5 @@ jobs:
         DATABASE_ADAPTER: ${{ matrix.db }}
         BUNDLE_GEMFILE: "${{ matrix.gemfile }}"
         BUNDLE_PATH: '../vendor/bundle'
+        RAILS_ENV: 'test'
       run: bundle exec rake
