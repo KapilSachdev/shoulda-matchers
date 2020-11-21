@@ -26,7 +26,6 @@ jobs:
         PGUSER: postgres
         RAILS_ENV: test
     - run: |
-        gem update --system --force --no-document
         gem uninstall -v '>= 2' -i $(rvm gemdir)@global -ax bundler || true
         gem install bundler -v '< 2' --no-document
         bundle exec rake
