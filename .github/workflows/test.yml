@@ -24,6 +24,11 @@ jobs:
         key: ${{ runner.os }}-ruby-${{ matrix.ruby }}-gems-${{ hashFiles('**/Gemfile.lock') }}
         restore-keys: |
           ${{ runner.os }}-ruby-${{ matrix.ruby }}-gems-
+    - name: Bundle install
+      run: |
+        bundle config path vendor/bundle
+        bundle install --jobs 4 --retry 3
+    - name: Test
       env:
         DATABASE_ADAPTER: ${{ matrix.db }}
         BUNDLE_GEMFILE: "${{ matrix.gemfile }}"
@@ -32,10 +37,5 @@ jobs:
         RAILS_ENV: test
         BUNDLE_PATH: 'vendor/bundle'
         GEM_HOME: 'vendor/bundle'
-    - name: Bundle install
-      run: |
-        bundle config path vendor/bundle
-        bundle install --jobs 4 --retry 3
-    - name: Test
       run: |
         bundle exec rake
