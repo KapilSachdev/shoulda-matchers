@@ -40,4 +40,5 @@ jobs:
       env:
         DATABASE_ADAPTER: ${{ matrix.db }}
         BUNDLE_GEMFILE: "${{ matrix.gemfile }}"
+        DEBUG_COMMANDS: 1
       run: bundle exec rake
