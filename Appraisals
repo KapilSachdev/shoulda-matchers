@@ -134,3 +134,23 @@ if Gem::Requirement.new('>= 2.5.0').
     gem 'sqlite3', '~> 1.4'
   end
 end
+
+appraise 'rails_6_1' do
+  instance_eval(&shared_test_dependencies)
+
+  gem 'rails', '6.1.0.rc1'
+  gem 'puma', '~> 5.0'
+  gem 'bootsnap', '>= 1.5.0', require: false
+  gem 'sass-rails', '>= 6'
+  gem 'turbolinks', '~> 5.2'
+  gem 'jbuilder', '~> 2.10'
+  gem 'bcrypt', '~> 3.1.16'
+  gem 'capybara', '>= 3.33'
+  gem 'listen', '~> 3.3'
+  gem 'selenium-webdriver'
+  gem 'webdrivers'
+
+  # Database adapters
+  gem 'pg', '>= 0.18', '< 2.0'
+  gem 'sqlite3', '~> 1.4'
+end
