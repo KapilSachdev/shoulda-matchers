@@ -1,0 +1,3 @@
+steps:
+  - name: ":test:"
+    command: "bundle install && bundle exec rake"
