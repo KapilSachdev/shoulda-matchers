@@ -1,0 +1,44 @@
+name: Test
+
+on: [push]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    services:
+      postgres:
+        image: postgres
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        env:
+          POSTGRES_PASSWORD: postgres
+
+    strategy:
+      fail-fast: false
+      matrix:
+        ruby: [2.7]
+        db: [sqlite3, postgresql]
+        gemfile: [gemfiles/rails_6_0.gemfile]
+
+    steps:
+    - name: Checkout Repository
+      uses: actions/checkout@v2
+
+    - name: Setup Ruby
+      uses: ruby/setup-ruby@v1
+      env:
+        BUNDLE_GEMFILE: "${{ matrix.gemfile }}"
+      with:
+        ruby-version: ${{ matrix.ruby }}
+        bundler-cache: true
+
+    - name: Run Test
+      env:
+        DATABASE_ADAPTER: ${{ matrix.db }}
+        BUNDLE_GEMFILE: "${{ matrix.gemfile }}"
+        DEBUG_COMMANDS: 1
+      run: bundle exec rake
